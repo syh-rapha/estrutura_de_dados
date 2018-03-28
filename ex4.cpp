@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #define n 5
 
 using namespace std;
@@ -10,42 +9,44 @@ typedef struct data{
 	int ano;
 }dataFormat;
 
-void insertion(dataFormat maiorHoje[], int tamMaior){
+int compararDatas(dataFormat data_1, dataFormat data_2){
+	if(data_1.ano >= data_2.ano)
+		if(data_1.mes >= data_2.mes || data_1.ano > data_2.ano)
+			if(data_1.dia >= data_2.dia || data_1.mes > data_2.mes || data_1.ano > data_2.ano)
+				return 1;	
+	return 0;
+}
+
+void insertion(dataFormat maiorHoje[], dataFormat menorHoje[], int tamMaior, int tamMenor){
 	int i, indiceInserir;
 	dataFormat valorAtual;
 	for(i=1; i<tamMaior; i++){
 		valorAtual = maiorHoje[i];
 		indiceInserir = i;
-		while(indiceInserir > 0 && valorAtual.dia < maiorHoje[indiceInserir-1].dia){
+		while(indiceInserir > 0 && compararDatas(maiorHoje[indiceInserir-1], valorAtual)){
 			indiceInserir--;
 			maiorHoje[indiceInserir+1] = maiorHoje[indiceInserir];
 		}
 		maiorHoje[indiceInserir] = valorAtual;
 	}
-	
-	for(i=1; i<tamMaior; i++){
-		valorAtual = maiorHoje[i];
+
+	for(i=1; i<tamMenor; i++){
+		valorAtual = menorHoje[i];
 		indiceInserir = i;
-		while(indiceInserir > 0 && valorAtual.mes < maiorHoje[indiceInserir-1].mes){
+		while(indiceInserir > 0 && compararDatas(valorAtual, menorHoje[indiceInserir-1])){
 			indiceInserir--;
-			maiorHoje[indiceInserir+1] = maiorHoje[indiceInserir];
+			menorHoje[indiceInserir+1] = menorHoje[indiceInserir];
 		}
-		maiorHoje[indiceInserir] = valorAtual;
+		menorHoje[indiceInserir] = valorAtual;
 	}
 	
-	for(i=1; i<tamMaior; i++){
-		valorAtual = maiorHoje[i];
-		indiceInserir = i;
-		while(indiceInserir > 0 && valorAtual.ano < maiorHoje[indiceInserir-1].ano){
-			indiceInserir--;
-			maiorHoje[indiceInserir+1] = maiorHoje[indiceInserir];
-		}
-		maiorHoje[indiceInserir] = valorAtual;
-	}
-	
-	cout << "Data maiores que a de hoje em ordem crescente !\n";
+	cout << "Data maiores ou iguais que a de hoje em ordem crescente !\n";
 	for(i=0; i < tamMaior; i++)
 		cout << maiorHoje[i].dia << "/" << maiorHoje[i].mes << "/" << maiorHoje[i].ano << "\n";
+
+	cout << "Data menores que a de hoje em ordem decrescente !\n";
+	for(i=0; i < tamMenor; i++)
+		cout << menorHoje[i].dia << "/" << menorHoje[i].mes << "/" << menorHoje[i].ano << "\n";
 }
 
 
@@ -72,19 +73,16 @@ int main(){
 	}
 	
 	for(i=0; i<n; i++){
-		if(v[i].ano >= hoje.ano)
-			if(v[i].mes >= hoje.mes || v[i].ano > hoje.ano)
-				if(v[i].dia >= hoje.dia || v[i].mes > hoje.mes || v[i].ano > hoje.ano){
-					maiorHoje[k] = v[i];
-					k++;
-				}
-		else{
+		if(compararDatas(v[i], hoje)){
+			maiorHoje[k] = v[i];
+			k++;
+		}else{
 			menorHoje[j] = v[i];
 			j++;
 		}						
 	}
 	
-	insertion(maiorHoje, k);
+	insertion(maiorHoje, menorHoje, k, j);
 		
 	return 0;
 }
