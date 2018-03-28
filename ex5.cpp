@@ -1,49 +1,76 @@
 #include <iostream>
-#include <string>
 #include <cstdlib>
 #include <ctime>
 #define qtdCartelas 15
+#define TRUE 1
+#define FALSE 0
 using namespace std;
+
+typedef int TIPOCHAVE;
+
+typedef struct{
+    TIPOCHAVE chave;
+    int cartela[10];
+}REGISTRO;
+
+typedef struct{
+    REGISTRO a[qtdCartelas];
+    int nroElem;
+}LISTA;
+
+void inicializar(LISTA *lista){
+    lista -> nroElem = 0;
+}
 
 int randomize(){
 	return ((rand() % 99) + 1);
 }
 
-void insertionCrescente(int v[], int tam){
+void insertionCrescente(LISTA *bingo, int indice){
 	int i, valorAtual, indiceInserir;
-	for(i=1; i < tam; i++){
-		valorAtual = v[i];
+	for(i=1; i < 10; i++){
+		valorAtual = bingo->a[indice].cartela[i];
 		indiceInserir = i;
-		while(indiceInserir > 0 && valorAtual < v[indiceInserir-1]){
+		while(indiceInserir > 0 && valorAtual < bingo->a[indice].cartela[indiceInserir-1]){
 			indiceInserir--;
-			v[indiceInserir+1] = v[indiceInserir];
+			bingo->a[indice].cartela[indiceInserir+1] = bingo->a[indice].cartela[indiceInserir];
 		}
-		v[indiceInserir] = valorAtual;
+		bingo->a[indice].cartela[indiceInserir] = valorAtual;
 	}
 }
 
-void gerarCartela(int v[], int qtdNumeros, int numCartelas){
-	int m, i, j, flag, k = 1;
+void gerarCartela(LISTA *bingo){
+	int m, i, j, flag, k, cartela_auxiliar[10];
 	
-	for(m=0; m < numCartelas; i++){
-		v[0] = randomize();
-		for(i = 1; i < qtdNumeros; i++){
+	for(m=0; m < qtdCartelas; m++){
+		k = 1;
+		bingo->a[m].cartela[0] = randomize();
+		for(i = 1; i < 10; i++){
 			do{
-				v[i] = randomize();
+				bingo->a[m].cartela[i] = randomize();
 				flag = 0;
 				for(j=0; j<k; j++)
-					if(v[j] == v[i])
+					if(bingo->a[m].cartela[j] == bingo->a[m].cartela[i])
 						flag = 1;			
 			}while(flag);
 			k++;
 		}
-		insertionCrescente(v, qtdNumeros);
+		bingo->nroElem++;
+		insertionCrescente(bingo, m);
 	}
 }
 
 int main(){
-	int v[qtdCartelas];
+	LISTA bingo;
+	int i, j;
 	srand (time(NULL));
-	gerarCartela(v, 10, qtdCartelas);
+	inicializar(&bingo);
+	gerarCartela(&bingo);
+	for(j=0; j<qtdCartelas; j++){
+		for(i=0; i<10; i++){
+			cout << " " << bingo.a[j].cartela[i];
+		}
+		cout << "\n";
+	}
 	return 0;
 }
