@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#define qtdCartelas 15
+#define qtdCartelas 30000
 using namespace std;
 
 typedef int TIPOCHAVE;
@@ -24,7 +24,7 @@ int randomize(){
 	return ((rand() % 99) + 1);
 }
 
-void insertionCrescente(LISTA *bingo, int indice){
+void insertionCrescenteVetorLista(LISTA *bingo, int indice){
 	int i, valorAtual, indiceInserir;
 	for(i=1; i < 10; i++){
 		valorAtual = bingo->a[indice].cartela[i];
@@ -36,6 +36,20 @@ void insertionCrescente(LISTA *bingo, int indice){
 		bingo->a[indice].cartela[indiceInserir] = valorAtual;
 	}
 }
+
+void insertionCrescenteVetor(int *v){
+	int i, valorAtual, indiceInserir;
+	for(i=1; i < 5; i++){
+		valorAtual = v[i];
+		indiceInserir = i;
+		while(indiceInserir > 0 && valorAtual < v[indiceInserir-1]){
+			indiceInserir--;
+			v[indiceInserir+1] = v[indiceInserir];
+		}
+		v[indiceInserir] = valorAtual;
+	}
+}
+
 void insertionCrescenteLista(LISTA *bingo, LISTA *lista_auxiliar){
 	int i, indiceInserir;
 	for(i=1; i < qtdCartelas; i++){
@@ -64,7 +78,7 @@ void gerarCartela(LISTA *bingo){
 			}while(flag);
 		}
 		bingo->nroElem++;
-		insertionCrescente(bingo, m);
+		insertionCrescenteVetorLista(bingo, m);
 	}
 }
 void gerarCartelaGanhadora(int *v){
@@ -79,6 +93,7 @@ void gerarCartelaGanhadora(int *v){
 					flag = 1;
 		}while(flag);
 	}
+	insertionCrescenteVetor(v);
 }
 
 int verificaGanhador(LISTA *bingo, int *v){
@@ -110,16 +125,13 @@ int main(){
 	resultado = verificaGanhador(&bingo, cartelaPremiada);
 	
 	if(resultado < qtdCartelas){
-		cout << "Cartela Vencedora ->";
+		cout << "\nCartela Vencedora ->";
 		for(i=0; i<10; i++)
 			cout << " " << bingo.a[resultado].cartela[i];
-
-		cout << "\n";
-		cout << "Cartela Sorteada ->";
-
+		cout << "\nCartela Sorteada ->";
 		for(i=0; i<5; i++)
 			cout << " " << cartelaPremiada[i];
-		
-	}else cout << "Nao houve cartela vencedora";
+		cout << "\n";
+	}else cout << "\nNao houve cartela vencedora\n";
 	return 0;
 }
