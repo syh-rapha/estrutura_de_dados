@@ -2,8 +2,6 @@
 #include <cstdlib>
 #include <ctime>
 #define qtdCartelas 15
-#define TRUE 1
-#define FALSE 0
 using namespace std;
 
 typedef int TIPOCHAVE;
@@ -38,39 +36,90 @@ void insertionCrescente(LISTA *bingo, int indice){
 		bingo->a[indice].cartela[indiceInserir] = valorAtual;
 	}
 }
+void insertionCrescenteLista(LISTA *bingo, LISTA *lista_auxiliar){
+	int i, indiceInserir;
+	for(i=1; i < qtdCartelas; i++){
+		lista_auxiliar->a[0] = bingo->a[i];
+		indiceInserir = i;
+		while(indiceInserir > 0 && lista_auxiliar->a[0].cartela[0] < bingo->a[indiceInserir-1].cartela[0]){
+			indiceInserir--;
+			bingo->a[indiceInserir+1] = bingo->a[indiceInserir];
+		}
+		bingo->a[indiceInserir] = lista_auxiliar->a[0];
+	}
+}
 
 void gerarCartela(LISTA *bingo){
-	int m, i, j, flag, k, cartela_auxiliar[10];
+	int m, i, j, flag, cartela_auxiliar[10];
 	
 	for(m=0; m < qtdCartelas; m++){
-		k = 1;
 		bingo->a[m].cartela[0] = randomize();
 		for(i = 1; i < 10; i++){
 			do{
 				bingo->a[m].cartela[i] = randomize();
 				flag = 0;
-				for(j=0; j<k; j++)
+				for(j=0; j<i; j++)
 					if(bingo->a[m].cartela[j] == bingo->a[m].cartela[i])
 						flag = 1;			
 			}while(flag);
-			k++;
 		}
 		bingo->nroElem++;
 		insertionCrescente(bingo, m);
 	}
 }
+void gerarCartelaGanhadora(int *v){
+	v[0] = randomize();
+	int flag, j;
+	for(int i = 1; i < 5; i++){
+		do{
+			flag = 0;
+			v[i] = randomize();
+			for(j=0; j<i; j++)
+				if(v[j] == v[i])
+					flag = 1;
+		}while(flag);
+	}
+}
+
+int verificaGanhador(LISTA *bingo, int *v){
+	int i, j, k, contador;
+	for(i=0; i<qtdCartelas; i++){
+		contador = 0;
+		for(j=0; j<10; j++){
+			for(k=0; k<5; k++){
+				if(v[k] == bingo->a[i].cartela[j]){
+					contador++;
+					if(contador == 5)
+						return i;
+				}
+			}
+		}
+	}
+	return qtdCartelas+1;
+}
 
 int main(){
-	LISTA bingo;
-	int i, j;
+	LISTA bingo, lista_auxiliar;
+	int i, j, resultado, cartelaPremiada[5];
 	srand (time(NULL));
+	inicializar(&lista_auxiliar);
 	inicializar(&bingo);
 	gerarCartela(&bingo);
-	for(j=0; j<qtdCartelas; j++){
-		for(i=0; i<10; i++){
-			cout << " " << bingo.a[j].cartela[i];
-		}
+	insertionCrescenteLista(&bingo, &lista_auxiliar);
+	gerarCartelaGanhadora(cartelaPremiada);
+	resultado = verificaGanhador(&bingo, cartelaPremiada);
+	
+	if(resultado < qtdCartelas){
+		cout << "Cartela Vencedora ->";
+		for(i=0; i<10; i++)
+			cout << " " << bingo.a[resultado].cartela[i];
+
 		cout << "\n";
-	}
+		cout << "Cartela Sorteada ->";
+
+		for(i=0; i<5; i++)
+			cout << " " << cartelaPremiada[i];
+		
+	}else cout << "Nao houve cartela vencedora";
 	return 0;
 }
