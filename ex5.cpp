@@ -25,8 +25,8 @@ int randomize(){
 }
 
 void insertionCrescenteVetorLista(LISTA *bingo, int indice){
-	int i, valorAtual, indiceInserir;
-	for(i=1; i < 10; i++){
+	int valorAtual, indiceInserir;
+	for(int i = 1; i < 10; i++){
 		valorAtual = bingo->a[indice].cartela[i];
 		indiceInserir = i;
 		while(indiceInserir > 0 && valorAtual < bingo->a[indice].cartela[indiceInserir-1]){
@@ -38,8 +38,8 @@ void insertionCrescenteVetorLista(LISTA *bingo, int indice){
 }
 
 void insertionCrescenteVetor(int *v){
-	int i, valorAtual, indiceInserir;
-	for(i=1; i < 5; i++){
+	int valorAtual, indiceInserir;
+	for(int i = 1; i < 5; i++){
 		valorAtual = v[i];
 		indiceInserir = i;
 		while(indiceInserir > 0 && valorAtual < v[indiceInserir-1]){
@@ -51,8 +51,8 @@ void insertionCrescenteVetor(int *v){
 }
 
 void insertionCrescenteLista(LISTA *bingo, LISTA *lista_auxiliar){
-	int i, indiceInserir;
-	for(i=1; i < qtdCartelas; i++){
+	int indiceInserir;
+	for(int i = 1; i < qtdCartelas; i++){
 		lista_auxiliar->a[0] = bingo->a[i];
 		indiceInserir = i;
 		while(indiceInserir > 0 && lista_auxiliar->a[0].cartela[0] < bingo->a[indiceInserir-1].cartela[0]){
@@ -64,15 +64,15 @@ void insertionCrescenteLista(LISTA *bingo, LISTA *lista_auxiliar){
 }
 
 void gerarCartela(LISTA *bingo){
-	int m, i, j, flag, cartela_auxiliar[10];
+	int flag;
 	
-	for(m=0; m < qtdCartelas; m++){
+	for(int m = 0; m < qtdCartelas; m++){
 		bingo->a[m].cartela[0] = randomize();
-		for(i = 1; i < 10; i++){
+		for(int i = 1; i < 10; i++){
 			do{
 				bingo->a[m].cartela[i] = randomize();
 				flag = 0;
-				for(j=0; j<i; j++)
+				for(int j=0; j<i; j++)
 					if(bingo->a[m].cartela[j] == bingo->a[m].cartela[i])
 						flag = 1;			
 			}while(flag);
@@ -83,12 +83,12 @@ void gerarCartela(LISTA *bingo){
 }
 void gerarCartelaGanhadora(int *v){
 	v[0] = randomize();
-	int flag, j;
+	int flag;
 	for(int i = 1; i < 5; i++){
 		do{
 			flag = 0;
 			v[i] = randomize();
-			for(j=0; j<i; j++)
+			for(int j=0; j<i; j++)
 				if(v[j] == v[i])
 					flag = 1;
 		}while(flag);
@@ -97,11 +97,11 @@ void gerarCartelaGanhadora(int *v){
 }
 
 int verificaGanhador(LISTA *bingo, int *v){
-	int i, j, k, contador;
+	int i, contador;
 	for(i=0; i<qtdCartelas; i++){
 		contador = 0;
-		for(j=0; j<10; j++){
-			for(k=0; k<5; k++){
+		for(int j=0; j<10; j++){
+			for(int k=0; k<5; k++){
 				if(v[k] == bingo->a[i].cartela[j]){
 					contador++;
 					if(contador == 5)
@@ -115,7 +115,7 @@ int verificaGanhador(LISTA *bingo, int *v){
 
 int main(){
 	LISTA bingo, lista_auxiliar;
-	int i, j, resultado, cartelaPremiada[5];
+	int resultado, cartelaPremiada[5];
 	srand (time(NULL));
 	inicializar(&lista_auxiliar);
 	inicializar(&bingo);
@@ -126,10 +126,10 @@ int main(){
 	
 	if(resultado < qtdCartelas){
 		cout << "\nCartela Vencedora ->";
-		for(i=0; i<10; i++)
+		for(int i=0; i<10; i++)
 			cout << " " << bingo.a[resultado].cartela[i];
 		cout << "\nCartela Sorteada ->";
-		for(i=0; i<5; i++)
+		for(int i=0; i<5; i++)
 			cout << " " << cartelaPremiada[i];
 		cout << "\n";
 	}else cout << "\nNao houve cartela vencedora\n";
