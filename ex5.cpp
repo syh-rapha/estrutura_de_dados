@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#define qtdCartelas 30000
+#define qtdCartelas 1000
 using namespace std;
 
 typedef int TIPOCHAVE;
@@ -115,7 +115,7 @@ int verificaGanhador(LISTA *bingo, int *v){
 
 int main(){
 	LISTA bingo, lista_auxiliar;
-	int resultado, cartelaPremiada[5];
+	int resultado, cartelaPremiada[5], i, k;
 	srand (time(NULL));
 	inicializar(&lista_auxiliar);
 	inicializar(&bingo);
@@ -123,13 +123,19 @@ int main(){
 	insertionCrescenteLista(&bingo, &lista_auxiliar);
 	gerarCartelaGanhadora(cartelaPremiada);
 	resultado = verificaGanhador(&bingo, cartelaPremiada);
+
+	for(i=0; i<qtdCartelas; i++){
+		for(k=0; k<10; k++)
+			cout << " " << bingo.a[i].cartela[k];
+	cout << "\n";
+	}
 	
 	if(resultado < qtdCartelas){
 		cout << "\nCartela Vencedora ->";
-		for(int i=0; i<10; i++)
+		for(i=0; i<10; i++)
 			cout << " " << bingo.a[resultado].cartela[i];
 		cout << "\nCartela Sorteada ->";
-		for(int i=0; i<5; i++)
+		for(i=0; i<5; i++)
 			cout << " " << cartelaPremiada[i];
 		cout << "\n";
 	}else cout << "\nNao houve cartela vencedora\n";

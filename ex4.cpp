@@ -40,13 +40,6 @@ void insertion(dataFormat maiorHoje[], dataFormat menorHoje[], int tamMaior, int
 		menorHoje[indiceInserir] = valorAtual;
 	}
 	
-	cout << "Data maiores ou iguais que a de hoje em ordem crescente !\n";
-	for(i=0; i < tamMaior; i++)
-		cout << maiorHoje[i].dia << "/" << maiorHoje[i].mes << "/" << maiorHoje[i].ano << "\n";
-
-	cout << "Data menores que a de hoje em ordem decrescente !\n";
-	for(i=0; i < tamMenor; i++)
-		cout << menorHoje[i].dia << "/" << menorHoje[i].mes << "/" << menorHoje[i].ano << "\n";
 }
 
 
@@ -83,6 +76,14 @@ int main(){
 	}
 	
 	insertion(maiorHoje, menorHoje, k, j);
+
+	cout << "Data maiores ou iguais que a de hoje em ordem crescente !\n";
+	for(i=0; i < k; i++)
+		cout << maiorHoje[i].dia << "/" << maiorHoje[i].mes << "/" << maiorHoje[i].ano << "\n";
+
+	cout << "Data menores que a de hoje em ordem decrescente !\n";
+	for(i=0; i < j; i++)
+		cout << menorHoje[i].dia << "/" << menorHoje[i].mes << "/" << menorHoje[i].ano << "\n";
 		
 	return 0;
 }

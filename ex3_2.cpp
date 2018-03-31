@@ -47,13 +47,11 @@ int classificaVetor(int mat[2][n], int v[]){
 			}
 		}
 		if(!encontrou){
-			
 			mat[0][j] = v[i];
 			mat[1][j]++;
 			j++;
-			}		
+		}		
 	}		
-
 	return j;
 }
 

@@ -12,9 +12,10 @@ void selectionDecrescente(int v[]){
 		aux = v[mini];
 		v[mini] = v[i];
 		v[i] = aux;
-		cout << "\n";
 		for(k=0; k<n; k++)
 			cout <<" " <<v[k];
+		cout << "\n";
+
 	}
 }
 
