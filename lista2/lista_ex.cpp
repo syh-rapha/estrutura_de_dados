@@ -13,16 +13,6 @@ typedef struct{
     int nroElem;
 }LISTA;
 
-typedef struct{
-    int elem;
-    int count;
-}RegistroNovo;
-
-typedef struct{
-    REGISTRO a[MAX];
-    int nroElem;
-}ListaNova;
-
 void inicializar(LISTA *lista){
     lista -> nroElem = 0;
 }
@@ -107,6 +97,8 @@ int main(){
 	inicializar(&L1);
 	inicializar(&L2);
 	inicializar(&L3);
+	inicializar(&L4);
+	inicializar(&L5);
 	insereNoFim(10, &L1);
 	insereNoFim(20, &L1);
 	insereNoFim(15, &L1);
@@ -121,5 +113,6 @@ int main(){
 	exibir(L1);
 	concatenar(L2, L4, &L5); //Resolve exercicio 5
 	exibir(L5);
+
 	return 0;
 }
