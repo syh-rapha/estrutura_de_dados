@@ -78,9 +78,33 @@ void exibir (ListaNova lista){
 	cout << "\n";
 }
 
+int calculaFrequenciaMaior(ListaNova lista){
+	int maior, i;
+	if(lista.nroElem > 0)
+		maior = lista.a[0].count;
+	else return -1;
+	for(i=1; i<lista.nroElem; i++)
+		if(maior < lista.a[i].count)
+			maior = lista.a[i].count;
+	return maior;
+}
+
+int calculaFrequenciaMenor(ListaNova lista){
+	int menor, i;
+	if(lista.nroElem > 0){
+		menor = lista.a[0].count;
+	}else return -1;
+	for(i=1; i<lista.nroElem; i++)
+		if(menor > lista.a[i].count)
+			menor = lista.a[i].count;
+	return menor;
+}
+
+
 
 int main(){
 	ListaNova L1, L2;
+	int i;
 	inicializar(&L1);
 	inicializar(&L2);
 	insereNoFim(10, &L1);
@@ -90,6 +114,19 @@ int main(){
 	exibir(L1);
 	copiaNaoRepet(L1, &L2); //Resolve exercicio 6
 	exibir(L2);
-
+	cout << "\nElementos com maior repeticao -> ";
+	for(i=0; i < L1.nroElem; i++){
+		int maior;
+		maior = calculaFrequenciaMaior(L1); //Resolve exercicio 7
+		if(maior == L1.a[i].count)
+			cout << " " << L1.a[i].elem;
+	}
+	cout << "\nElementos com menor repeticao ->";
+	for(i=0; i< L1.nroElem ; i++){
+		int menor;
+		menor = calculaFrequenciaMenor(L1); //Resolve exercicio 7
+		if(menor == L1.a[i].count)
+			cout << " " << L1.a[i].elem;
+	}
 	return 0;
 }
