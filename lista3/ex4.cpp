@@ -24,7 +24,7 @@ void inicializar(LISTA_LIGADA_CIRCULAR *lista){
     int i;
     for(i=0; i<MAX; i++)
         lista->A[i].prox = i + 1;
-    lista->A[MAX-1].prox = 0;
+    lista->A[MAX-1].prox = -1;
 }
 
 void exibir(LISTA_LIGADA_CIRCULAR lista){
@@ -45,13 +45,19 @@ void exibir(LISTA_LIGADA_CIRCULAR lista){
 
 int obterNo(LISTA_LIGADA_CIRCULAR *lista){
     int no = lista->dispo;
-    if(no > -1 && lista->nroElem < MAX)
+    if(no > -1)
         lista->dispo = lista->A[no].prox;
     return no;
 }
 
+int recuperaUltimo(LISTA_LIGADA_CIRCULAR lista, int inicio){
+	int i;
+	for(i=0; i<lista.nroElem; i++)
+		if(lista.A[i].prox == inicio)
+			return i;
+}
 int inserirNoInicio(TIPOCHAVE ch, TIPOINFO info, LISTA_LIGADA_CIRCULAR *lista){
-    int i;
+    int i, x;
     if(lista->dispo < 0)
         return false;
     i = obterNo(lista);
@@ -59,53 +65,27 @@ int inserirNoInicio(TIPOCHAVE ch, TIPOINFO info, LISTA_LIGADA_CIRCULAR *lista){
     lista->A[i].info = info;
     if(lista->inicio < 0)
         lista->A[i].prox = 0;
-    else
-        lista->A[i].prox = lista->inicio;
+    else{
+    	lista->A[i].prox = lista->inicio;
+    }
+    x = recuperaUltimo(*lista, lista->inicio);
     lista->inicio = i;
+    lista->A[x].prox = lista->inicio;
     lista->nroElem++;
     return true;
 
 }
 
-int buscaSeqOrd(int ch, LISTA_LIGADA_CIRCULAR lista, int *ant){
-    int i = lista.inicio;
-    *ant = -1;
-    while(i != -1 && (lista.A[i].chave < ch)){
-        *ant = i;
-        i = lista.A[i].prox;
-    }
-    if((i != -1) && lista.A[i].chave == ch)
-        return i;
-    return -1;
-}
-
-
-void devolverNo(LISTA_LIGADA_CIRCULAR *lista, int j){
-    lista->A[j].prox = lista->dispo;
-    lista->dispo = j;
-}
-
-int excluirElem(TIPOCHAVE ch, LISTA_LIGADA_CIRCULAR *lista){
-    int ant, ret;
-    ret = buscaSeqOrd(ch,*lista, &ant);
-    if(ret == -1)
-        return false;
-    else{
-        if(ant == -1){
-                lista->inicio = lista->A[ret].prox;
-        }else{
-            lista->A[ant].prox = lista->A[i].prox;
-        }
-    }
-    devolverNo(lista, ret);
-    lista->nroElem--;
-    return true;
-}
 
 int main(){
     LISTA_LIGADA_CIRCULAR lista;
     int ant, x;
     inicializar(&lista);
+    inserirNoInicio(50, 100, &lista);
+    inserirNoInicio(70, 200, &lista);
+    inserirNoInicio(90, 300, &lista);
+    for(x=0; x<3; x++)
+    	printf("Valor da chave na posicao %d: %d | Proximo elemento --> %d\n", x, lista.A[x].chave, lista.A[x].prox);
     return 0;
 
 }
