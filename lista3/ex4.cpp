@@ -28,16 +28,16 @@ void inicializar(LISTA_LIGADA_CIRCULAR *lista){
 }
 
 void exibir(LISTA_LIGADA_CIRCULAR lista){
-    int i = lista.inicio;
+    int i, prox1 = lista.inicio;
 
     if(lista.nroElem != 0)
         cout << "Inicio -->[";
     else return;
 
-    while(i != -1){
+    for(i=0; i<lista.nroElem; i++){
         cout << lista.A[i].chave << " - " << lista.A[i].info;
-        i = lista.A[i].prox;
-        if(i != -1)
+        prox1 = lista.A[prox1].prox;
+        if(prox1 != lista.inicio)
             cout << ", ";
     }
     cout << "]<-- Fim\n";
@@ -73,19 +73,45 @@ int inserirNoInicio(TIPOCHAVE ch, TIPOINFO info, LISTA_LIGADA_CIRCULAR *lista){
     lista->A[x].prox = lista->inicio;
     lista->nroElem++;
     return true;
-
 }
 
+int comparaListas(LISTA_LIGADA_CIRCULAR lista1, LISTA_LIGADA_CIRCULAR lista2){
+	int count = 0, j, i, prox1, prox2;
+	if(lista1.nroElem == 0 && lista2.nroElem == 0)
+		return true;
+	prox1 = lista1.inicio;
+	for(i=0; i<lista1.nroElem; i++){
+		prox2 = lista2.inicio;
+		for(j=0; j<lista2.nroElem; j++){
+			if(lista1.A[prox1].chave == lista2.A[prox2].chave){
+				count++;
+				break;
+			}
+			prox2 = lista2.A[prox2].prox;
+		}
+		prox1 = lista1.A[prox1].prox;
+	}
+	if(count == lista1.nroElem && count == lista2.nroElem)
+		return true;
+	else return false;
+}
 
 int main(){
-    LISTA_LIGADA_CIRCULAR lista;
-    int ant, x;
+    LISTA_LIGADA_CIRCULAR lista, lista2;
+    int x;
     inicializar(&lista);
-    inserirNoInicio(50, 100, &lista);
-    inserirNoInicio(70, 200, &lista);
+    inicializar(&lista2);
+    inserirNoInicio(70, 100, &lista);
+    inserirNoInicio(30, 200, &lista);
     inserirNoInicio(90, 300, &lista);
+    inserirNoInicio(70, 300, &lista2);
+    inserirNoInicio(50, 300, &lista2);
+    inserirNoInicio(90, 300, &lista2);
+    exibir(lista);
     for(x=0; x<3; x++)
-    	printf("Valor da chave na posicao %d: %d | Proximo elemento --> %d\n", x, lista.A[x].chave, lista.A[x].prox);
+    	cout << "Valor da chave na posicao " << x << ": " << lista.A[x].chave << " | Proximo elemento --> " << lista.A[x].prox << "\n";
+    if(comparaListas(lista, lista2))
+    	cout << "Listas sao iguais !\n";
+    else cout << "Listas nao sao iguais !\n";
     return 0;
-
 }
