@@ -96,38 +96,82 @@ int ehCrescente(FILA fi){
 void inverte(FILA *fi){
 	
 	NO *p1, *p2;
-	int tamanho, metade, i, j;
+	int tamanho1, metade, i, j;
 	TIPOINFO aux;
 	p1 = fi->inicio;
 	p2 = fi->fim;
-	tamanho = tamanho(*fi);
-	metade = tamanho/2;
+	tamanho1 = tamanho(*fi);
+	metade = tamanho1/2;
 	
 	for(i=1; i<=metade; i++){
 		aux = p1->info;
 		p1->info = p2->info;
 		p2->info = aux;
 		p1 = p1->prox;
-		for(j=0; j<tamanho-i; j++)
+		for(j=0; j<tamanho1-i; j++)
 			p2 = p2->prox;
 	}
 	
 }
 
 void inverte2(FILA *fi){
+	NO *p1, *p2, *p3, *aux;
+	p1 = fi->inicio;
+	p2 = fi->inicio->prox;
+	p3 = p2->prox;
 	
+	while(p2){
+		p2->prox = p1;
+		p1 = p2;
+		p2 = p3;
+		if(p2)
+			p3 = p2->prox;
+	}
+	fi->fim = fi->inicio;
+	fi->inicio = p1;
+	fi->fim->prox = NULL;
+}
+
+int separa(FILA *pares, FILA *impares){
+	TIPOINFO aux;
+	int tam = tamanho(*pares), i;
+	for(i=0; i<tam; i++){
+		aux = remover(pares);
+		if((aux%2) == 0)
+			inserir(aux, pares);
+		else
+			inserir(aux, impares);
+	}
+}
+
+void removeMaior(FILA *fi){
+	int tam = tamanho(*fi), i;
+	TIPOINFO maior = fi->inicio->info, aux;
+	NO *p = fi->inicio;
+	for(i=0; i<tam; i++){
+		if(p->info > maior)
+			maior = p->info;
+		p = p->prox;
+	}
+	
+	for(i=0; i<tam; i++){
+		aux = remover(fi);
+		if(aux != maior)
+			inserir(aux, fi);	
+	}
 }
 
 int main(){
-	FILA fila;
+	FILA fila, fila2;
 	inicializar(&fila);
+	inicializar(&fila2);
 	inserir(400, &fila);
-	inserir(200, &fila);
+	inserir(201, &fila);
 	inserir(300, &fila);
+	separa(&fila, &fila2);
 	mostrar(fila);
-	if(ehCrescente(fila))
-		cout << "\nEh crescente !";
-	else
-		cout << "\nNao eh crescente !";
+	mostrar(fila2);
+	removeMaior(&fila);
+	mostrar(fila);
 	return 0;
 }
