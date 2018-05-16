@@ -1,6 +1,5 @@
 #include <iostream>
 #include <stdlib.h>
-#include <malloc.h>
 using namespace std;
 
 typedef int TIPOINFO;
