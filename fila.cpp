@@ -49,12 +49,6 @@ int inserir(TIPOCHAVE ch, FILA *fi){
     }
 }
 
-TIPOCHAVE primeiroElem(FILA fi){
-    if(fi.nroElem > 0)
-        return fi.a[fi.inicio].chave;
-    return false;
-}
-
 TIPOCHAVE remover(FILA *fi){
     TIPOCHAVE val;
     val = fi->a[fi->inicio].chave;
