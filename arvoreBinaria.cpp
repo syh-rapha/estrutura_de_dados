@@ -24,6 +24,8 @@ void mostrar(NO* r){
         cout << r->chave;
         mostrar(r->dir);
         cout << " ]";
+    }else{
+        cout << "Arvore Vazia !";
     }
 }
 
@@ -33,8 +35,8 @@ void inicializar(ARVORE &a){
 
 bool estaVazia(ARVORE a){
     if(a.raiz != NULL)
-        return true;
-    return false;
+        return false;
+    return true;
 }
 
 void insereRaiz(TIPOCHAVE chave, ARVORE &a){
@@ -124,15 +126,88 @@ int contFolhas(NO *no){
     return cont1 + cont2;
 }
 
+int nivelNo(TIPOCHAVE chave, NO* no, int niv){
+    if(!no)
+        return -1;
+    if(no->chave==chave)
+        return niv;
+    int nivEsq = nivelNo(chave, no->esq, niv+1);
+    if(nivEsq != -1)
+        return nivEsq;
+    int nivDir = nivelNo(chave, no->dir, niv+1);
+    if(nivDir != -1)
+        return nivDir;
+    return -1;
+}
+
+int nivel(TIPOCHAVE chave, ARVORE &a){
+    if(estaVazia(a)){
+        cout << "Arvore vazia." << endl;
+        return -1;
+    }
+    return nivelNo(chave, a.raiz, 0);
+}
+
+void percurssoPreOrdem(NO* no){
+    if(no){
+        cout << no->chave << endl;
+        percurssoPreOrdem(no->esq);
+        percurssoPreOrdem(no->dir);
+    }
+}
+
+void percurssoInOrdem(NO *no){
+    if(no){
+        percurssoInOrdem(no->esq);
+        cout << no->chave << endl;
+        percurssoInOrdem(no->dir);
+    }
+}
+
+void percurssoPosOrdem(NO *no){
+    if(no){
+        percurssoPosOrdem(no->esq);
+        percurssoPosOrdem(no->dir);
+        cout << no->chave << endl;
+    }
+}
+
+bool estaPresente(NO *no, TIPOCHAVE valor){
+    if(!no)
+        return false;
+    bool achou = false;
+    achou = estaPresente(no->esq, valor);
+    if(!achou)
+        achou = estaPresente(no->dir, valor);
+    if(no->chave == valor)
+        return true;
+}
+
+NO* tornarVazio(NO* no){
+    if(!no)
+        return NULL;
+    no->esq = tornarVazio(no->esq);
+    no->dir = tornarVazio(no->dir);
+    free(no);
+    return NULL;
+}
+
+void mostraFolhas(NO* no){
+    if(no){
+        if(!no->dir && !no->esq)
+            cout << no->chave << endl;
+        mostraFolhas(no->esq);
+        mostraFolhas(no->dir);
+    }
+}
+
 int main(){
+    bool x;
     ARVORE arv;
     inicializar(arv);
     insereRaiz(10, arv);
     insereEsquerda(10, 20, arv);
     insereDireita(10, 40, arv);
     insereEsquerda(20, 30, arv);
-    mostrar(arv.raiz);
-    cout << "\n" << conta(arv.raiz);
-    cout << "\n" << altura(arv.raiz);
-    return 0;
+    mostraFolhas(arv.raiz);
 }

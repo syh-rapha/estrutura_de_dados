@@ -59,6 +59,13 @@ void inserirNoFim(int info, LISTA *li){
 	}
 }
 
+void inserirNoInicio(int info, LISTA *li){
+	NO *novoNo = (NO*)malloc(sizeof(NO));
+	novoNo->info = info;
+	novoNo->prox = li->inicio;
+	li->inicio = novoNo;
+}
+
 int excluirElem(int info, LISTA *li){
 	NO *p, *ant;
 	p = buscaSeq(info, *li, &ant);
@@ -82,16 +89,7 @@ int main(){
 	inserirNoFim(222, &lista);
 	inserirNoFim(333, &lista);
 	mostrar(lista);
-	NO *p, *ant;
-	p = ultimoElemento(lista);
-	if(p)
-		cout << "Ultimo elemento: " << p->info;
-	cout << "\n";
-	p = buscaSeq(888, lista, &ant);
-	if(p)
-		cout << "Valor Encontrado";
-	else
-		cout << "Valor Nao Encontrado";
-
+	inserirNoInicio(400, &lista);
+	mostrar(lista);
 	return 0;
 }

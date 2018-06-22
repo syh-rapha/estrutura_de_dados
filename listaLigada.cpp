@@ -124,7 +124,6 @@ int inserirOrdenado(TIPOCHAVE ch, TIPOINFO info, LISTA *lista){
     }
     lista->nroElem++;
     return true;
-
 }
 
 void devolverNo(LISTA *lista, int j){
@@ -162,7 +161,6 @@ int main(){
     exibir(lista);
     inserirOrdenado(52, 222, &lista);
     exibir(lista);
-    buscaSeqOrd()
     cout<< ant;
     return 0;
 
