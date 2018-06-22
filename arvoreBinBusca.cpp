@@ -19,8 +19,14 @@ void inicializar(ARVORE &a){
 	a.raiz = NULL;
 }
 
-void mostrar(){
-	
+void mostrar(NO* r){
+    if(r){
+        cout << "[ ";
+        mostrar(r->esq);
+        cout << r->chave;
+        mostrar(r->dir);
+        cout << " ]";
+    }
 }
 
 NO *inserirNO(NO *no, TIPOCHAVE valor){
@@ -73,6 +79,40 @@ void inserirNaoRec(TIPOCHAVE valor, ARVORE &a){
 			}
 		}
 	}
+}
+
+NO* antecessor(NO* no, NO* noAnt){
+	if(noAnt->dir)
+		noAnt->dir = antecessor(no, noAnt->dir);
+	else{
+		no->chave = noAnt->chave;
+		noAnt = noAnt->esq;
+	}
+	return noAnt;
+}
+
+NO* removeNo(NO* no, TIPOCHAVE chave){
+	if(!no){
+		return NULL;
+	}
+	if(chave < no->chave)
+		no->esq = removeNo(no->esq, chave);
+	else if(chave > no->chave)
+		no->dir = removeNo(no->dir, chave);
+	else if(chave == no->chave){
+		if(!no->dir){
+			no = no->esq;
+		}else if(!no->esq){
+			no = no->dir;
+		}else if(no->dir && no->esq){
+			no->esq = antecessor(no, no->esq);
+		}
+	}
+	return no;
+}
+
+void remover(TIPOCHAVE chave, ARVORE &a){
+	a.raiz = removeNo(a.raiz, chave);	
 }
 
 NO* buscaNoNaoRec(NO* no, TIPOCHAVE chave){
@@ -130,18 +170,31 @@ void copiaParaVetorInOrdem(NO *no, int v[], int &i){
 	}
 }
 
+TIPOCHAVE buscaProxInOrdem(NO* no, TIPOCHAVE ch){
+	if(no){
+		buscaProxInOrdem(no->esq, ch);
+		if(no->esq && no->esq->chave < ch)
+				return no->chave;
+		if(no->dir && no->dir->chave > ch)
+				return no->chave;
+		buscaProxInOrdem(no->dir, ch);
+	}	
+}
+
 int main(){
 	ARVORE a;
 	TIPOCHAVE x;
 	inicializar(a);
-	inserirNaoRec(10, a);
-	inserirNaoRec(15, a);
-	inserirNaoRec(5, a);
+	inserirNaoRec(50, a);
 	inserirNaoRec(30, a);
-	inserirNaoRec(40, a);
-	int vet[5], k=0;
-	copiaParaVetorInOrdem(a.raiz, vet, k);
-	for(int i=0; i<5; i++)
-		cout << " " << vet[i];	
+	inserirNaoRec(70, a);
+	inserirNaoRec(75, a);
+	inserirNaoRec(65, a);
+
+	mostrar(a.raiz);	
+	x = buscaProxInOrdem(a.raiz, 70);
+	cout << "\n" << x << "\n";
+	remover(50, a);
+	mostrar(a.raiz);
 	return 0; 
 }
