@@ -30,12 +30,12 @@ void mostrar(NO* r){
 }
 
 NO *inserirNO(NO *no, TIPOCHAVE valor){
-	if(no){
+	if(!no){
 		no = (NO*)malloc(sizeof(NO));
 		no->chave = valor;
 		no->esq = no->dir = NULL;
 	}
-	else if(valor< no->chave){
+	else if(valor < no->chave){
 		no->esq = inserirNO(no->esq, valor);
 	}
 	else if(valor > no->chave){

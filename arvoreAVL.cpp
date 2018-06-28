@@ -63,7 +63,7 @@ NO* rotacaoDir(NO* pai){
     pai = filho;
     pai->dir = calculaAlturaFB(pai->dir);
     pai = calculaAlturaFB(pai);
-    return no;
+    return pai;
 }
 
 NO* rotacaoEsq(NO* pai){
@@ -73,10 +73,98 @@ NO* rotacaoEsq(NO* pai){
     pai = filho;
     pai->esq = calculaAlturaFB(pai->esq);
     pai = calculaAlturaFB(pai);
+    return pai;
+}
+
+NO* balancear(NO* no){
+    if(no->fb == 2){
+        if(no->dir->fb == -1){
+            no->dir = rotacaoDir(no->dir);
+        }
+        no = rotacaoEsq(no);
+    }else if(no->fb == -2){
+            if(no->esq->fb == 1){
+                no->esq = rotacaoEsq(no->esq);
+            }
+            no = rotacaoDir(no);
+    }
+    return no;
+}
+
+NO* inserirNO(NO* no, TIPOCHAVE valor){
+    if(!no){
+        no = (NO*)malloc(sizeof(NO));
+        no->chave = valor;
+        no->esq = no->dir = NULL;
+    }
+    else if(valor < no->chave){
+        no->esq = inserirNO(no->esq, valor);
+    }
+    else if(valor > no->chave){
+        no->dir = inserirNO(no->dir, valor);
+    }
+    else return no;
+    no = calculaAlturaFB(no);
+
+    if(no->fb == 2 || no->fb == -2)
+        no = balancear(no);
+    return no;
+}
+
+void inserir(ARVORE &a, TIPOCHAVE ch){
+    a.raiz = inserirNO(a.raiz, ch);
+}
+
+NO *antecessor(NO *no, NO *noAnt){
+    if (noAnt->dir)
+        noAnt->dir = antecessor(no, noAnt->dir);
+    else {
+        no->chave = noAnt->chave;
+        noAnt = noAnt->esq;
+    }
+    if(noAnt){
+        noAnt = calculaAlturaFB(noAnt);
+        if(noAnt->fb == 2 || noAnt->fb == -2){
+            noAnt = balancear(noAnt);
+        }
+    }
+    return noAnt;
+}
+
+NO *removeNo(NO *no, TIPOCHAVE chave){
+    if (!no){
+        return NULL;
+    }
+    if (chave < no->chave)
+        no->esq = removeNo(no->esq, chave);
+    else if (no->chave < chave)
+        no->dir = removeNo(no->dir, chave);
+    else
+        if (!no->dir && !no->esq)
+            no = NULL;
+        else
+            if (!no->dir)
+                no = no->esq;
+            else if(!no->esq)
+                no = no->dir;
+            else
+            no->esq = antecessor(no, no->esq);
+    if(no){
+        no = calculaAlturaFB(no);
+        if(no->fb == 2 || no->fb == -2)
+            no = balancear(no);
+    }
     return no;
 }
 
 int main(){
+    ARVORE arv;
+    inicializar(arv);
+    inserir(arv, 10);
+    inserir(arv, 20);
+    inserir(arv, 9);
+    removeNo(arv.raiz, 9);
+    mostrar(arv.raiz);
 
     return 0;
 }
