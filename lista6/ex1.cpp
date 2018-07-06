@@ -142,12 +142,12 @@ NO* balancear(NO* no){
     return no;
 }
 
-NO* toAVL(NO* no){
+void toAVL(NO* no){
     if(no){
-        no->dir = toAVL(no->dir);
+        toAVL(no->dir);
         if(!verificaAVL(no))
             no = balancear(no);
-        no->esq = toAVL(no->esq);
+        toAVL(no->esq);
     }
 }
 
