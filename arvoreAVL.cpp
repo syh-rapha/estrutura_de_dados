@@ -157,13 +157,17 @@ NO *removeNo(NO *no, TIPOCHAVE chave){
     return no;
 }
 
+void remover(ARVORE &a, TIPOCHAVE chave){
+    a.raiz = removeNo(a.raiz, chave);
+}
+
 int main(){
     ARVORE arv;
     inicializar(arv);
     inserir(arv, 10);
     inserir(arv, 20);
-    inserir(arv, 9);
-    removeNo(arv.raiz, 9);
+    inserir(arv, 30);
+    inserir(arv, 40);
     mostrar(arv.raiz);
 
     return 0;
